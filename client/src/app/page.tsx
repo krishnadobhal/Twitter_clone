@@ -7,8 +7,9 @@ import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { FaRegBookmark } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
 import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import { FeedCard } from "./components/FeedCard";
+//const inter = Inter({ subsets: ["latin"] });
+import { CgMoreO } from "react-icons/cg";
 
 interface TwitterSidebarButton {
   title: string;
@@ -37,38 +38,57 @@ const SidebarItems: TwitterSidebarButton[] = [
     icon: <FaRegBookmark />,
   },
   {
-    title: "profile",
+    title:"Premium",
+    icon:<BsTwitterX/>
+  },
+  {
+    title: "Profile",
     icon: <CgProfile />,
   },
+  {
+    title: "More",
+    icon: < CgMoreO/>,
+  },
+
 ];
 
 export default function Home() {
   return (
-    <div className="{inter.className}">
-      <div className="grid grid-cols-12 h-screen w-screen px-56">
-        <div className="col-span-3 pt-8">
-          <div className="text-4xl w-fit hover:bg-gray-800 rounded-full p-4 cursor-pointer transition-all">
+    <div>
+      <div className="grid grid-cols-12 h-screen w-screen px-32">
+        <div className="col-span-3   pt-1 ml-16  ">
+          <div className=" text-3xl w-fit hover:bg-gray-800 rounded-full p-3 ml-2  cursor-pointer transition-all">
             <BsTwitterX />
           </div>
-          <div className="mt-4  text-2xl pr-4">
+          <div className="mt-1  text-xl pr-4">
             <ul>
               {SidebarItems.map((item) => (
                 <li
                   key={item.title}
-                  className="flex justify-start items-center gap-4 hover:bg-gray-800 rounded-full w-fit px-5 py-2 cursor-pointer mb-2"
+                  className="flex justify-start items-center gap-4 hover:bg-gray-900 hover:backdrop-brightness-90 rounded-full w-fit px-5 py-2 cursor-pointer mb-2"
                 >
-                  <span>{item.icon}</span> <span>{item.title}</span>
+                  <span className="text-3xl">{item.icon}</span> <span >{item.title}</span>
                 </li>
               ))}
             </ul>
             <div className="mt-5 px-5">
-              <button className="bg-[#1A8CD8] py-3 px-4 rounded-full text-xl w-full ">
-                Tweet
+              <button className="bg-[#1A8CD8] py-3 px-4 rounded-full text-xl w-full font-semibold ">
+                Post
               </button>
             </div>
           </div>
         </div>
-        <div className="col-span-6 border-r-[1px] border-l-[1px] border-gray-400 "></div>
+        <div className="col-span-5 border-r-[1px] border-l-[1px] border-gray-600 h-screen overflow-scroll no-scrollbar">
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+        </div>
         <div className="col-span-3 "></div>
       </div>
     </div>
