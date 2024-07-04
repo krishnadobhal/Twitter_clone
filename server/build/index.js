@@ -13,7 +13,7 @@ const app_1 = require("./app");
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = yield (0, app_1.initServer)();
-        app.listen(process.env.PORT || 80);
+        app.listen(8000, () => console.log('Server Started at Port : 8000'));
     });
 }
 init();

@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "prisma": "^5.16.1",
     "tsc-watch": "^6.2.0",
     "typescript": "^5.5.3"
@@ -20,8 +21,10 @@
   "dependencies": {
     "@apollo/server": "^4.10.4",
     "@prisma/client": "^5.16.1",
+    "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
-    "graphql": "^16.9.0"
+    "graphql": "^16.9.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }
