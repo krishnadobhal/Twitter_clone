@@ -11,7 +11,12 @@ import { Inter } from "next/font/google";
 import { FeedCard } from "./components/FeedCard";
 //const inter = Inter({ subsets: ["latin"] });
 import { CgMoreO } from "react-icons/cg";
-import {GoogleLogin} from "@react-oauth/google"
+import { graphqlClient } from "../../clientgrahql/api";
+import {CredentialResponse, GoogleLogin} from "@react-oauth/google"
+import toast from "react-hot-toast";
+import { verifyGoogleTokenQuery } from "../../graphql/query/user";
+
+
 interface TwitterSidebarButton {
   title: string;
   icon: any;
@@ -53,10 +58,22 @@ const SidebarItems: TwitterSidebarButton[] = [
 
 ];
 
-export default function Home() {
-  //  const handleLoginWithGoogle= useCallback{(credentials:CredentialResponse)=>{
 
-  // },[]}
+
+export default function Home() {
+  const handleLoginWithGoogle = useCallback(async (cred: CredentialResponse) => {
+    const googleToken = cred.credential;
+    if (!googleToken) return toast.error("Google token not found");
+
+    try {
+      const { verifyGoogleToken } = await graphqlClient.request(verifyGoogleTokenQuery, { token: googleToken });
+      toast.success("Verified Success");
+      console.log(verifyGoogleToken);
+    } catch (error) {
+      toast.error("Verification failed");
+      console.error(error);
+    }
+  }, []);
   return (
     <div>
       <div className="grid grid-cols-12 h-screen w-screen px-32">
@@ -96,7 +113,7 @@ export default function Home() {
         <div className="col-span-3 ">
           <div className="ml-4 mt-2 p-5 border border-gray-500 rounded-2xl flex flex-col ">
             <h1 className="my-2 text-2xl font-semibold">New to Twitter</h1>
-          <GoogleLogin onSuccess={(credentials)=>console.log(credentials)}/>
+            <GoogleLogin onSuccess={handleLoginWithGoogle} />
           </div>
         </div>
       </div>
