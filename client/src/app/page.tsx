@@ -69,6 +69,9 @@ export default function Home() {
       const { verifyGoogleToken } = await graphqlClient.request(verifyGoogleTokenQuery, { token: googleToken });
       toast.success("Verified Success");
       console.log(verifyGoogleToken);
+      if(verifyGoogleToken){
+        window.localStorage.setItem('_twitter_token',verifyGoogleToken);
+      }
     } catch (error) {
       toast.error("Verification failed");
       console.error(error);
