@@ -111,9 +111,9 @@ export default function Home() {
               </button>
             </div>
           </div>
-          <div>
-            {user && user.profileImageURL && (<Image src={user?.profileImageURL} alt="user-image"  height={50} width={50} />)}
-            <h1 className="text-2xl font-bold mt-5">
+          <div className=" mt-5 flex justify-center gap-3 items-center ">
+            {user && user.profileImageURL && (<Image className="rounded-3xl" src={user?.profileImageURL} alt="user-image"  height={50} width={50} />)}
+            <h1 className="text-2xl font-semibold ">
               {user?.firstName} {user?.lastName}
             </h1>
           </div>
