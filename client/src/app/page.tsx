@@ -1,5 +1,6 @@
 "use client"
 import React, { useCallback } from "react";
+import Image from 'next/image';
 import { BsTwitterX } from "react-icons/bs";
 import { AiFillHome } from "react-icons/ai";
 import { IoIosSearch } from "react-icons/io";
@@ -15,6 +16,8 @@ import { graphqlClient } from "../../clientgrahql/api";
 import {CredentialResponse, GoogleLogin} from "@react-oauth/google"
 import toast from "react-hot-toast";
 import { verifyGoogleTokenQuery } from "../../graphql/query/user";
+import { useCurrentUser } from "../../hooks/user";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 interface TwitterSidebarButton {
@@ -61,9 +64,14 @@ const SidebarItems: TwitterSidebarButton[] = [
 
 
 export default function Home() {
+  const {user}=useCurrentUser();
+  console.log(user)
+  const queryClient=useQueryClient()
+
   const handleLoginWithGoogle = useCallback(async (cred: CredentialResponse) => {
     const googleToken = cred.credential;
     if (!googleToken) return toast.error("Google token not found");
+    console.log(googleToken)
 
     try {
       const { verifyGoogleToken } = await graphqlClient.request(verifyGoogleTokenQuery, { token: googleToken });
@@ -72,11 +80,12 @@ export default function Home() {
       if(verifyGoogleToken){
         window.localStorage.setItem('_twitter_token',verifyGoogleToken);
       }
+      await queryClient.invalidateQueries({queryKey:["current_user"]})
     } catch (error) {
       toast.error("Verification failed");
       console.error(error);
     }
-  }, []);
+  }, [queryClient]);
   return (
     <div>
       <div className="grid grid-cols-12 h-screen w-screen px-32">
@@ -101,6 +110,12 @@ export default function Home() {
               </button>
             </div>
           </div>
+          <div>
+            {user && user.profileImageURL && (<Image src={user?.profileImageURL} alt="user-image"  height={50} width={50} />)}
+            <h1 className="text-2xl font-bold mt-5">
+              {user?.firstName} {user?.lastName}
+            </h1>
+          </div>
         </div>
         <div className="col-span-5 border-r-[1px] border-l-[1px] border-gray-600 h-screen overflow-scroll no-scrollbar">
           <FeedCard/>
@@ -114,10 +129,10 @@ export default function Home() {
           <FeedCard/>
         </div>
         <div className="col-span-3 ">
-          <div className="ml-4 mt-2 p-5 border border-gray-500 rounded-2xl flex flex-col ">
+          {!user && (<div className="ml-4 mt-2 p-5 border border-gray-500 rounded-2xl flex flex-col ">
             <h1 className="my-2 text-2xl font-semibold">New to Twitter</h1>
             <GoogleLogin onSuccess={handleLoginWithGoogle} />
-          </div>
+          </div>)}
         </div>
       </div>
     </div>
