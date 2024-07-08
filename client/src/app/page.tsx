@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { verifyGoogleTokenQuery } from "../../graphql/query/user";
 import { useCurrentUser } from "../../hooks/user";
 import { useQueryClient } from "@tanstack/react-query";
+import { AddTweet } from "./components/AddTweet";
 
 
 interface TwitterSidebarButton {
@@ -118,6 +119,9 @@ export default function Home() {
           </div>
         </div>
         <div className="col-span-5 border-r-[1px] border-l-[1px] border-gray-600 h-screen overflow-scroll no-scrollbar">
+          <div>
+            <AddTweet user={user}/>
+          </div>
           <FeedCard/>
           <FeedCard/>
           <FeedCard/>
