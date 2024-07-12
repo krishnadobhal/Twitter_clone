@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import Image from 'next/image';
 import { BsTwitterX } from "react-icons/bs";
 import { AiFillHome } from "react-icons/ai";
@@ -19,6 +19,8 @@ import { verifyGoogleTokenQuery } from "../../graphql/query/user";
 import { useCurrentUser } from "../../hooks/user";
 import { useQueryClient } from "@tanstack/react-query";
 import { AddTweet } from "./components/AddTweet";
+import { useGetAllTweets } from "../../hooks/tweet";
+import { Tweet } from "../../gql/graphql";
 
 
 interface TwitterSidebarButton {
@@ -66,8 +68,10 @@ const SidebarItems: TwitterSidebarButton[] = [
 
 export default function Home() {
   const {user}=useCurrentUser();
-  console.log(user)
+
+ const {tweets=[]}=useGetAllTweets();
   const queryClient=useQueryClient()
+
 
   const handleLoginWithGoogle = useCallback(async (cred: CredentialResponse) => {
     const googleToken = cred.credential;
@@ -122,15 +126,17 @@ export default function Home() {
           <div>
             <AddTweet user={user}/>
           </div>
+          {
+            tweets?.map(tweet => tweet? <FeedCard key={tweet?.id} data={tweet as Tweet}/> : null)
+          }
+          {/* <FeedCard/>
           <FeedCard/>
           <FeedCard/>
           <FeedCard/>
           <FeedCard/>
           <FeedCard/>
           <FeedCard/>
-          <FeedCard/>
-          <FeedCard/>
-          <FeedCard/>
+          <FeedCard/> */}
         </div>
         <div className="col-span-3 ">
           {!user && (<div className="ml-4 mt-2 p-5 border border-gray-500 rounded-2xl flex flex-col ">
