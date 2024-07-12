@@ -72,11 +72,16 @@ export default function Home() {
  const {tweets=[]}=useGetAllTweets();
   const queryClient=useQueryClient()
 
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("_twitter_token");
+    location.reload();
+  }, []);
+
 
   const handleLoginWithGoogle = useCallback(async (cred: CredentialResponse) => {
     const googleToken = cred.credential;
     if (!googleToken) return toast.error("Google token not found");
-    console.log(googleToken)
+    // console.log(googleToken)
 
     try {
       const { verifyGoogleToken } = await graphqlClient.request(verifyGoogleTokenQuery, { token: googleToken });
@@ -141,9 +146,22 @@ export default function Home() {
         <div className="col-span-3 ">
           {!user && (<div className="ml-4 mt-2 p-5 border border-gray-500 rounded-2xl flex flex-col ">
             <h1 className="my-2 text-2xl font-semibold">New to Twitter</h1>
-            <GoogleLogin onSuccess={handleLoginWithGoogle} />
-          </div>)}
+            <GoogleLogin onSuccess={handleLoginWithGoogle}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
+          </div>
+        )}
         </div>
+        <div>
+            {user && (<button
+              className="bg-[#1d9bf0] font-semibold text-sm py-2 px-4 rounded-full ml-4 mt-4"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>)}
+          </div>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ class JWTService {
             return jsonwebtoken_1.default.verify(token, JWT_SECRET);
         }
         catch (e) {
-            console.log(e);
+            // console.log(e)
             return null;
         }
     }

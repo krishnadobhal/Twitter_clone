@@ -21,7 +21,7 @@ class JWTService{
             return JWT.verify(token,JWT_SECRET) as JWTUser;
         }
         catch(e){
-            console.log(e)
+            // console.log(e)
             return null
         }
     }

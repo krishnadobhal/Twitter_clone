@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { prismaClient } from '../../client/db';
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 import JWTService from '../../services/jwt';
 import { GraphqlContext } from '../../interface';
 import { User } from '@prisma/client';
@@ -33,12 +34,12 @@ const queries = {
             responseType: "json",
         });
 
-        const user = await prismaClient.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: { email: data.email },
         });
 
         if (!user) {
-            await prismaClient.user.create({
+            await prisma.user.create({
                 data: {
                     email: data.email,
                     firstName: data.given_name,
@@ -48,7 +49,7 @@ const queries = {
             })
         }
 
-        const userInDb = await prismaClient.user.findUnique({ where: { email: data.email } });
+        const userInDb = await prisma.user.findUnique({ where: { email: data.email } });
         if (!userInDb) throw new Error('user with email not found')
         const userToken = await JWTService.generateTokenForUser(userInDb)
 
@@ -57,7 +58,7 @@ const queries = {
     getCurrentUser :async(parent:any, args:any , ctx:GraphqlContext)=>{
         // console.log(ctx)
         const id=ctx.user?.id
-        const user=prismaClient.user.findUnique({where:{id}});
+        const user=prisma.user.findUnique({where:{id}});
         return user;
     }
 };
@@ -65,7 +66,7 @@ const queries = {
 const extraResolvers={
     User:{
         tweets: (parent:User)=>{
-            prismaClient.tweet.findMany({where:{author:{id:parent.id}}})
+            prisma.tweet.findMany({where:{author:{id:parent.id}}})
         }
     }
 }

@@ -13,9 +13,10 @@ export const useCreateTweet =()=>{
             graphqlClient.request(createTweetMutation,{payload}),
         onMutate:(payload)=>toast.loading("Creating Tweet",{id:'1'}),
         onSuccess:async()=>{
-            await queryClient.invalidateQueries(["all-tweets"]);
+            await queryClient.invalidateQueries({queryKey:["all-tweets"]});
             toast.success('Created Success',{id:'1'})
         },
+        onError:()=>toast.error('Not authorized',{id:'1'})
     })
     return mutation;
 }

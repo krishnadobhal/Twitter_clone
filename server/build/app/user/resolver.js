@@ -14,7 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = void 0;
 const axios_1 = __importDefault(require("axios"));
-const db_1 = require("../../client/db");
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
 const jwt_1 = __importDefault(require("../../services/jwt"));
 const queries = {
     verifyGoogleToken: (parent_1, _a) => __awaiter(void 0, [parent_1, _a], void 0, function* (parent, { token }) {
@@ -25,11 +26,11 @@ const queries = {
         const { data } = yield axios_1.default.get(googleOauthURL.toString(), {
             responseType: "json",
         });
-        const user = yield db_1.prismaClient.user.findUnique({
+        const user = yield prisma.user.findUnique({
             where: { email: data.email },
         });
         if (!user) {
-            yield db_1.prismaClient.user.create({
+            yield prisma.user.create({
                 data: {
                     email: data.email,
                     firstName: data.given_name,
@@ -38,7 +39,7 @@ const queries = {
                 }
             });
         }
-        const userInDb = yield db_1.prismaClient.user.findUnique({ where: { email: data.email } });
+        const userInDb = yield prisma.user.findUnique({ where: { email: data.email } });
         if (!userInDb)
             throw new Error('user with email not found');
         const userToken = yield jwt_1.default.generateTokenForUser(userInDb);
@@ -48,14 +49,14 @@ const queries = {
         var _a;
         // console.log(ctx)
         const id = (_a = ctx.user) === null || _a === void 0 ? void 0 : _a.id;
-        const user = db_1.prismaClient.user.findUnique({ where: { id } });
+        const user = prisma.user.findUnique({ where: { id } });
         return user;
     })
 };
 const extraResolvers = {
     User: {
         tweets: (parent) => {
-            db_1.prismaClient.tweet.findMany({ where: { author: { id: parent.id } } });
+            prisma.tweet.findMany({ where: { author: { id: parent.id } } });
         }
     }
 };
