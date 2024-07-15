@@ -7,6 +7,9 @@ import {User} from './user'
 import JWTService from '../services/jwt';
 import { GraphqlContext } from '../interface';
 import {Tweet} from "./tweet";
+
+
+
 export async function initServer() {
     const app=express();
     app.use(cors())

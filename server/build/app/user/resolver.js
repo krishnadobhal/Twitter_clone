@@ -51,13 +51,12 @@ const queries = {
         const id = (_a = ctx.user) === null || _a === void 0 ? void 0 : _a.id;
         const user = prisma.user.findUnique({ where: { id } });
         return user;
-    })
+    }),
+    getUserByid: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { id }, ctx) { return prisma.user.findUnique({ where: { id } }); })
 };
 const extraResolvers = {
     User: {
-        tweets: (parent) => {
-            prisma.tweet.findMany({ where: { author: { id: parent.id } } });
-        }
+        tweets: (parent) => prisma.tweet.findMany({ where: { author: { id: parent.id } } })
     }
 };
 exports.resolvers = { queries, extraResolvers };

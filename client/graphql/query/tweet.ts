@@ -3,15 +3,16 @@ import {graphql} from "../../gql";
 export const getAllTweetsQuery=graphql(`
     #graphql
     query GetAllTweets {
-         getAllTweets {
-          id
-          content
+      getAllTweets {
+        id
+        content
         imageURL
-       author {
-      firstName
-      lastName
-      profileImageURL
-    }
+        author {
+          id
+          firstName
+          lastName
+          profileImageURL
+        }
   }
 }
 
