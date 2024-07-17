@@ -31,6 +31,9 @@ export const FeedCard:FC<FeedCardProps> = (props) => {
             <h5>{data.author?.firstName + " " + data.author?.lastName}</h5>
           )}
         <p>{data.content}</p>
+        {
+          data.imageURL && <Image src={data.imageURL} alt="tweet-image" height={300} width={300}></Image>
+        }
         <div className='flex  justify-between p-2 w-[90%] text-gray-500'>
           <div>
           <BiMessageRounded/>

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.queries = void 0;
-exports.queries = `
- getAllTweets:[Tweet]
+exports.queries = `#graphql
+    getAllTweets:[Tweet]
+    getSignedUrlForTweet(imageName:String!,imageType:String!):String
 `;

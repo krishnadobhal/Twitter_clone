@@ -15,5 +15,12 @@ export const getAllTweetsQuery=graphql(`
         }
   }
 }
-
 `);
+
+export const GetSignedUrlForTweetQuery=graphql(`
+  #grphql
+  query GetSignedUrlForTweet($imageName: String!, $imageType: String!) {
+    getSignedUrlForTweet(imageName: $imageName, imageType: $imageType)
+  }
+`)
+
