@@ -19,22 +19,24 @@ import { graphqlClient } from "../../clientgrahql/api";
 import { verifyGoogleTokenQuery } from "../../graphql/query/user";
 import Image from "next/image";
 import { TwitterLayout } from "./components/Layout/TwitterLayout";
+import { getAllTweetsQuery } from "../../graphql/query/tweet";
 
 
 
 
-export default function Home() {
+const Home= ()=> {
 
-    const {user}=useCurrentUser();
-  const {tweets=[]}=useGetAllTweets();
+
+  const AllTweets=useGetAllTweets()
+  // const {tweets=[]}=useGetAllTweets();
   return (
     <div>
       <TwitterLayout>
-         <div>
-            <AddTweet user={user}/>
+        <div>
+            <AddTweet/>
           </div>
           {
-              tweets?.map(tweet => tweet? <FeedCard key={tweet?.id} data={tweet as Tweet}/> : null)
+              AllTweets.tweets?.map(tweet => tweet? <FeedCard key={tweet?.id} data={tweet as Tweet}/> : null)
             }
         </TwitterLayout>
       </div>
@@ -43,4 +45,6 @@ export default function Home() {
          )
 }
 
+
+export default Home;
 

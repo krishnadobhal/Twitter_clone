@@ -1,3 +1,4 @@
+"use client"
 import Image from 'next/image'
 import { FC } from 'react'
 import { BiMessageRounded } from "react-icons/bi";
@@ -5,6 +6,7 @@ import { FaRetweet } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { Tweet } from '../../../../gql/graphql';
+import Link from 'next/link';
 
 
 interface FeedCardProps{
@@ -21,7 +23,13 @@ export const FeedCard:FC<FeedCardProps> = (props) => {
           data.author?.profileImageURL && <Image className='rounded-full' src={data.author.profileImageURL} alt='avavtar' height={60} width={150} />}
       </div>
       <div className='col-span-10 sm:col-span-11'>
-        <h5>{data.author?.firstName+" "+data.author?.lastName}</h5>
+      {data.author?.id ? (
+          <Link href={`/${data.author.id}`}>
+            <h5>{data.author.firstName + " " + data.author.lastName}</h5>
+          </Link>
+            ) : (
+            <h5>{data.author?.firstName + " " + data.author?.lastName}</h5>
+          )}
         <p>{data.content}</p>
         <div className='flex  justify-between p-2 w-[90%] text-gray-500'>
           <div>

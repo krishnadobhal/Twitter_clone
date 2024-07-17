@@ -60,14 +60,15 @@ const queries = {
         const id=ctx.user?.id
         const user=prisma.user.findUnique({where:{id}});
         return user;
-    }
+    },
+    getUserByid: async(parent:any, {id}:{id:string} , ctx:GraphqlContext)=>prisma.user.findUnique({where:{id}})
+    
 };
 
 const extraResolvers={
     User:{
-        tweets: (parent:User)=>{
-            prisma.tweet.findMany({where:{author:{id:parent.id}}})
-        }
+        tweets: (parent:User)=>prisma.tweet.findMany({where:{author:{id:parent.id}}})
+        
     }
 }
 

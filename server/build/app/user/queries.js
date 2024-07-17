@@ -5,4 +5,5 @@ exports.queries = `#graphql
 
     verifyGoogleToken(token:String!):String
     getCurrentUser:User
+    getUserByid(id :ID!):User
 `;
