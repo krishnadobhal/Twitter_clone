@@ -24,14 +24,15 @@ const AboutPage = async ({ params }: { params: { ID: string } }) => {
     // console.log(userInfo.getUserByid)
     const usersInfomation= userInfo.getUserByid
     // console.log(userInfo.getUserByid?.tweets)
+    //console.log(usersInfomation?.tweets?.length);
+
     if (!userInfo.getUserByid)
         return (
             <TwitterLayout>
                 <div>Not found</div>
             </TwitterLayout>
         );
-
-
+       
     return (
         <TwitterLayout>
             <div>
@@ -40,8 +41,8 @@ const AboutPage = async ({ params }: { params: { ID: string } }) => {
                         <FaArrowLeft className="text-1xl" />
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-bold">krishna</h1>
-                        <h1 className="text-1xl font-bold text-slate-500">100 Tweets</h1>
+                        <h1 className="text-2xl font-bold">{usersInfomation?.firstName}</h1>
+                        <h1 className="text-1xl font-bold text-slate-500">{usersInfomation?.tweets?.length}</h1>
                     </div>
                 </nav>
                 {/* <div className="p-4 border">
