@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
 import axios from "axios";
 import JWTService from "./jwt";
+import { prismaClient } from '../client/db';
 
 interface GoogleTokenResult {
     iss?: string;
@@ -32,12 +31,12 @@ export default class UserService{
             responseType: "json",
         });
 
-        const user = await prisma.user.findUnique({
+        const user = await prismaClient.user.findUnique({
             where: { email: data.email },
         });
 
         if (!user) {
-            await prisma.user.create({
+            await prismaClient.user.create({
                 data: {
                     email: data.email,
                     firstName: data.given_name,
@@ -47,7 +46,7 @@ export default class UserService{
             })
         }
 
-        const userInDb = await prisma.user.findUnique({ where: { email: data.email } });
+        const userInDb = await prismaClient.user.findUnique({ where: { email: data.email } });
         if (!userInDb) throw new Error('user with email not found')
         const userToken = await JWTService.generateTokenForUser(userInDb)
 
@@ -55,6 +54,22 @@ export default class UserService{
     }
 
     public static async getUserById(id:string){
-       return prisma.user.findUnique({where:{id}});
+       return prismaClient.user.findUnique({where:{id}});
     }
+      
+    public static async followUser(from:string ,to:string){
+        return prismaClient.follows.create({
+            data:{
+                follower:{connect:{id:from}},
+                following:{connect:{od:to}},
+            },
+        });
+    }
+
+    public  static async unfollowUser(from:string, to:string){
+        return prismaClient.follows.delete({
+            where:{followerId_followingId:{followerId:from,followingId:to}}
+        })
+    }
+
 }

@@ -77,6 +77,7 @@ export const AddTweet = (): React.ReactNode => {
       imageURL:ImageURL
     });
     setContent("")
+    setImageURL("");
   }, [content, mutate,ImageURL]);
 
 

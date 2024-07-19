@@ -21,7 +21,20 @@ model User {
   profileImageURL String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  tweet           Tweet[]
+
+  followers Follows[] @relation("followers")
+  following Follows[] @relation("following")
+  tweet     Tweet[]
+}
+
+model Follows {
+  followers  User   @relation("followers", fields: [followerId], references: [id])
+  followerId String
+
+  following   User   @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
 }
 
 model Tweet {

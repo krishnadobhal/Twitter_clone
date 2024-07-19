@@ -30,4 +30,22 @@ const extraResolvers={
     }
 }
 
-export const resolvers = { queries , extraResolvers};
+const mutations={
+    followUser:async(
+        parent :any ,{to}:{to:string},ctx:GraphqlContext
+    )=>{
+        if(!ctx.user || !ctx.user.id) throw new Error("unauthenticated");
+        await UserService.followUser(ctx.user.id,to);
+        return true;
+    },
+
+    unfollowUser:async(
+        parent:any,{to}:{to:string},ctx:GraphqlContext
+    )=>{
+        if(!ctx.user || !ctx.user.id) throw new Error("unauthenticated");
+        await UserService.unfollowUser(ctx.user.id,to);
+        return true;
+    }
+};
+
+export const resolvers = { queries , extraResolvers,mutations};
