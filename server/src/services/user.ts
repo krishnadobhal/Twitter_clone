@@ -1,6 +1,8 @@
 import axios from "axios";
 import JWTService from "./jwt";
 import { prismaClient } from '../client/db';
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient()
 
 interface GoogleTokenResult {
     iss?: string;
@@ -58,16 +60,16 @@ export default class UserService{
     }
       
     public static async followUser(from:string ,to:string){
-        return prismaClient.follows.create({
+        return prisma.follows.create({
             data:{
                 follower:{connect:{id:from}},
-                following:{connect:{od:to}},
+                following:{connect:{id:to}},
             },
         });
     }
 
     public  static async unfollowUser(from:string, to:string){
-        return prismaClient.follows.delete({
+        return prisma.follows.delete({
             where:{followerId_followingId:{followerId:from,followingId:to}}
         })
     }

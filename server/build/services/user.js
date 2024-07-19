@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
 const axios_1 = __importDefault(require("axios"));
 const jwt_1 = __importDefault(require("./jwt"));
+const db_1 = require("../client/db");
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
 class UserService {
     static verifyGoogleAuthToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -25,11 +26,11 @@ class UserService {
             const { data } = yield axios_1.default.get(googleOauthURL.toString(), {
                 responseType: "json",
             });
-            const user = yield prisma.user.findUnique({
+            const user = yield db_1.prismaClient.user.findUnique({
                 where: { email: data.email },
             });
             if (!user) {
-                yield prisma.user.create({
+                yield db_1.prismaClient.user.create({
                     data: {
                         email: data.email,
                         firstName: data.given_name,
@@ -38,7 +39,7 @@ class UserService {
                     }
                 });
             }
-            const userInDb = yield prisma.user.findUnique({ where: { email: data.email } });
+            const userInDb = yield db_1.prismaClient.user.findUnique({ where: { email: data.email } });
             if (!userInDb)
                 throw new Error('user with email not found');
             const userToken = yield jwt_1.default.generateTokenForUser(userInDb);
@@ -47,7 +48,24 @@ class UserService {
     }
     static getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return prisma.user.findUnique({ where: { id } });
+            return db_1.prismaClient.user.findUnique({ where: { id } });
+        });
+    }
+    static followUser(from, to) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return prisma.follows.create({
+                data: {
+                    follower: { connect: { id: from } },
+                    following: { connect: { id: to } },
+                },
+            });
+        });
+    }
+    static unfollowUser(from, to) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return prisma.follows.delete({
+                where: { followerId_followingId: { followerId: from, followingId: to } }
+            });
         });
     }
 }

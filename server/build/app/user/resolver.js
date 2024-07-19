@@ -35,7 +35,40 @@ const queries = {
 };
 const extraResolvers = {
     User: {
-        tweets: (parent) => prisma.tweet.findMany({ where: { author: { id: parent.id } } })
+        tweets: (parent) => prisma.tweet.findMany({ where: { author: { id: parent.id } } }),
+        follower: (parent) => __awaiter(void 0, void 0, void 0, function* () {
+            const result = yield prisma.follows.findMany({
+                where: { following: { id: parent.id } },
+                include: {
+                    follower: true
+                }
+            });
+            return result.map(el => el.follower);
+        }),
+        following: (parent) => __awaiter(void 0, void 0, void 0, function* () {
+            const result = yield prisma.follows.findMany({
+                where: { follower: { id: parent.id } },
+                include: {
+                    following: true,
+                }
+            });
+            return result.map(el => el.following);
+            //console.log(result);
+        })
     }
 };
-exports.resolvers = { queries, extraResolvers };
+const mutations = {
+    followUser: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { to }, ctx) {
+        if (!ctx.user || !ctx.user.id)
+            throw new Error("unauthenticated");
+        yield user_1.default.followUser(ctx.user.id, to);
+        return true;
+    }),
+    unfollowUser: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { to }, ctx) {
+        if (!ctx.user || !ctx.user.id)
+            throw new Error("unauthenticated");
+        yield user_1.default.unfollowUser(ctx.user.id, to);
+        return true;
+    })
+};
+exports.resolvers = { queries, extraResolvers, mutations };

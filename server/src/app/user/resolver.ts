@@ -5,6 +5,7 @@ import JWTService from '../../services/jwt';
 import { GraphqlContext } from '../../interface';
 import { User } from '@prisma/client';
 import UserService from '../../services/user';
+import { prismaClient } from '../../client/db';
 
 const queries = {
     verifyGoogleToken: async (parent: any, { token }: { token: string }) => {
@@ -25,8 +26,32 @@ const queries = {
 
 const extraResolvers={
     User:{
-        tweets: (parent:User)=>prisma.tweet.findMany({where:{author:{id:parent.id}}})
+        tweets: (parent:User)=>prisma.tweet.findMany({where:{author:{id:parent.id}}}),
+        follower:async(parent:User)=>{
+           const result =await prisma.follows.findMany({
+                where:{following:{id:parent.id}},
+                include:{
+                    follower:true
+                }
+            })
+            
+             return result.map(el=>el.follower);
+
         
+        },
+        following:async(parent:User)=>{
+           const result= await prisma.follows.findMany({
+                where:{follower:{id:parent.id}},
+                 include:{
+                     following:true,
+                 }
+            })
+        
+        
+            return result.map(el=>el.following);
+            //console.log(result);
+        }
+
     }
 }
 
