@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { Any, ID } from "graphql-request/alpha/schema/scalars";
 import { useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
+import { json } from "stream/consumers";
 
 interface UserInfoprops{
     IDs:string,
@@ -19,7 +20,7 @@ interface UserInfoprops{
 export const UserInfos:FC<UserInfoprops> =(props)=> {
     // console.log(IDs);
     const {usersInfomation}=props
-    console.log(`user-> ${usersInfomation}`);
+   // console.log(`user-> ${JSON.stringify(usersInfomation)}`);
     
     // const { user } = useGetUserById(props.IDs)
     // console.log("hii");

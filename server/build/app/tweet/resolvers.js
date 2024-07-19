@@ -8,15 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 const client_s3_1 = require("@aws-sdk/client-s3");
-const s3Client = new client_s3_1.S3Client({});
+const user_1 = __importDefault(require("../../services/user"));
+const tweet_1 = __importDefault(require("../../services/tweet"));
+const s3Client = new client_s3_1.S3Client({
+    region: process.env.AWS_DEFAULT_REGION
+});
 const queries = {
-    getAllTweets: () => prisma.tweet.findMany({ orderBy: { createdAt: "desc" } }),
+    getAllTweets: () => tweet_1.default.getAllTweets(),
     getSignedUrlForTweet: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { imageType, imageName }, ctx) {
         if (!ctx.user || !ctx.user.id)
             throw new Error("Unauthenticated");
@@ -41,19 +48,13 @@ const mutations = {
     createTweet: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { payload }, ctx) {
         if (!ctx.user)
             throw new Error("You are not authenticated");
-        const tweet = yield prisma.tweet.create({
-            data: {
-                content: payload.content,
-                imageURL: payload.imageURL,
-                author: { connect: { id: ctx.user.id } },
-            }
-        });
+        const tweet = yield tweet_1.default.CreateTweet(Object.assign(Object.assign({}, payload), { userId: ctx.user.id }));
         return tweet;
     })
 };
 const extraResolvers = {
     Tweet: {
-        author: (parent) => prisma.user.findUnique({ where: { id: parent.authorId } })
+        author: (parent) => user_1.default.getUserById(parent.authorId)
     }
 };
 exports.resolvers = { mutations, extraResolvers, queries };
