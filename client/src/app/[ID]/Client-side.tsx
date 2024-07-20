@@ -34,13 +34,13 @@ export const UserInfos:FC<UserInfoprops> =(props)=> {
     const handleFollowUser=useCallback(async()=>{
      if(!props.usersInfomation?.id) return;
      await graphqlClient.request(followUserMutation,{to:props.usersInfomation?.id})
-     await queryClient.invalidateQueries({queryKey: ["current-user"]})
+     await queryClient.invalidateQueries({queryKey: ["current_user"]})
     },[props.usersInfomation.id ,queryClient])
 
     const handleUnFollowUser=useCallback(async()=>{
      if(!props.usersInfomation?.id) return;
      await graphqlClient.request(unfollowUserMutation,{to:props.usersInfomation?.id})
-     await queryClient.invalidateQueries({queryKey: ["current-user"]})
+     await queryClient.invalidateQueries({queryKey: ["current_user"]})
     },[props.usersInfomation.id ,queryClient])
 
     return (
