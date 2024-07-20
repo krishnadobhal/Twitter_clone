@@ -24,8 +24,7 @@ const AboutPage = async ({ params }: { params: { ID: string } }) => {
     // console.log(userInfo.getUserByid)
     const usersInfomation= userInfo.getUserByid
     // console.log(userInfo.getUserByid?.tweets)
-    //console.log(usersInfomation?.tweets?.length);
-
+    
     if (!userInfo.getUserByid)
         return (
             <TwitterLayout>
