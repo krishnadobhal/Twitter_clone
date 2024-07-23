@@ -10,6 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { URL } from "url";
 import { NextURL } from "next/dist/server/web/next-url";
+import { discardImageMutation } from "../../../../graphql/mutation/tweet";
 
 export const AddTweet = (): React.ReactNode => {
   const { user } = useCurrentUser();
@@ -18,6 +19,7 @@ export const AddTweet = (): React.ReactNode => {
 
   const [content, setContent] = useState("");
   const [ImageURL,setImageURL] = useState("")
+  const [ImageName,setImageName] = useState("")
 
   const handlerInputChangeFile=useCallback((input:HTMLInputElement)=>{
 
@@ -29,7 +31,7 @@ export const AddTweet = (): React.ReactNode => {
       if(!file) return;
       console.log(file);
       
-      
+      setImageName(file?.name)
       const {getSignedUrlForTweet}=await graphqlClient.request(GetSignedUrlForTweetQuery,{
         imageName:file?.name,
         imageType:file?.type
@@ -81,6 +83,16 @@ export const AddTweet = (): React.ReactNode => {
   }, [content, mutate,ImageURL]);
 
 
+const DiscardImage=useCallback(async()=>{
+  console.log(ImageName);
+  await graphqlClient.request(discardImageMutation,{
+    imageName:ImageName
+  })
+  setContent("")
+  setImageURL("");
+  setImageName("")
+},[ImageName])
+
   return (
     <div className="grid grid-cols-12 gap-3 p-2 py-5  sm:p-5">
 
@@ -109,12 +121,21 @@ export const AddTweet = (): React.ReactNode => {
         <div className="flex justify-between px-4 my-2 items-center">
           <CiImageOn onClick={handleSelectImage} className="text-2xl " />
 
+          <div className="flex gap-6">
+          <button 
+            onClick={DiscardImage}
+            className="text-slate-400 py-2 rounded-3xl px-6 font-bold cursor-pointer transition-all hover:bg-gray-900 hover:text-slate-100 "
+          >
+            Discard
+          </button>
+
           <button 
             onClick={handleCreateTweet}
             className="bg-blue-500 py-2 rounded-3xl px-6 font-bold"
           >
             Post
           </button>
+          </div>
 
         </div>
       </div>

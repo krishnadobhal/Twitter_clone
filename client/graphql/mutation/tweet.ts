@@ -8,3 +8,10 @@ export const createTweetMutation=graphql(`
         }
     }
     `)
+
+export const discardImageMutation=graphql(`
+    #graphql
+    mutation DiscardImage($imageName: String!) {
+        discardImage(ImageName: $imageName)
+    }   
+`)
