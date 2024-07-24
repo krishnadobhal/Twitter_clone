@@ -38,7 +38,7 @@ const queries = {
         const putObjectCommand = new client_s3_1.PutObjectCommand({
             Bucket: process.env.AWS_S3_BUCKET,
             ContentType: imageType,
-            Key: `uploads/${ctx.user.id}/tweets/${imageName}-${Date.now()}`,
+            Key: `uploads/${ctx.user.id}/tweets/${imageName}-${ctx.user.createdAt}`,
         });
         const signedURL = yield (0, s3_request_presigner_1.getSignedUrl)(s3Client, putObjectCommand);
         return signedURL;
@@ -50,6 +50,22 @@ const mutations = {
             throw new Error("You are not authenticated");
         const tweet = yield tweet_1.default.CreateTweet(Object.assign(Object.assign({}, payload), { userId: ctx.user.id }));
         return tweet;
+    }),
+    discardImage: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { ImageName }, ctx) {
+        var _b, _c, _d, _e;
+        const deleteObjectCommand = new client_s3_1.DeleteObjectCommand({
+            Bucket: process.env.AWS_S3_BUCKET,
+            Key: `uploads/${(_b = ctx.user) === null || _b === void 0 ? void 0 : _b.id}/tweets/${ImageName}-${(_c = ctx.user) === null || _c === void 0 ? void 0 : _c.createdAt}`,
+        });
+        console.log(`uploads/${(_d = ctx.user) === null || _d === void 0 ? void 0 : _d.id}/tweets/${ImageName}-${(_e = ctx.user) === null || _e === void 0 ? void 0 : _e.createdAt}`);
+        try {
+            yield s3Client.send(deleteObjectCommand);
+            console.log(`Successfully deleted `);
+        }
+        catch (error) {
+            console.error("Error deleting object:", error);
+        }
+        return true;
     })
 };
 const extraResolvers = {
