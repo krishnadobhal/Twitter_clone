@@ -16,9 +16,11 @@ import toast from "react-hot-toast";
 import { graphqlClient } from "../../../../clientgrahql/api";
 import { verifyGoogleTokenQuery } from "../../../../graphql/query/user";
 import Link from "next/link";
+import { User } from "../../../../gql/graphql";
 
 interface TwitterLayoutProp {
-  children: React.ReactNode;
+  children: React.ReactNode,
+  user:User|null
 }
 interface TwitterSidebarButton {
   title: string;
@@ -27,7 +29,7 @@ interface TwitterSidebarButton {
 }
 
 export const TwitterLayout: React.FC<TwitterLayoutProp> = (props) => {
-  const { user } = useCurrentUser();
+  const user = props.user
   // console.log(`user-> ${user}`)
   
   const SidebarItems: TwitterSidebarButton[] = useMemo(
@@ -101,9 +103,10 @@ export const TwitterLayout: React.FC<TwitterLayoutProp> = (props) => {
     [queryClient]
   );
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = useCallback(async() => {
     localStorage.removeItem("_twitter_token");
-    location.reload();
+    await queryClient.invalidateQueries({queryKey: ["all-tweets"]})
+    await queryClient.invalidateQueries({queryKey: ["current_user"]})
   }, []);
 
   return (

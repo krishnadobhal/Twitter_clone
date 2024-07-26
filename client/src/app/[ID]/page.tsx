@@ -27,13 +27,13 @@ const AboutPage = async ({ params }: { params: { ID: string } }) => {
     
     if (!userInfo.getUserByid)
         return (
-            <TwitterLayout>
+            <TwitterLayout user={null}>
                 <div>Not found</div>
             </TwitterLayout>
         );
        
     return (
-        <TwitterLayout>
+        <TwitterLayout user={usersInfomation as User}>
             <div>
                 <nav className="flex items-center gap-3 px-3 py-3">
                     <Link href="/">

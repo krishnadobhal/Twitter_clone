@@ -5,7 +5,7 @@ import { BiMessageRounded } from "react-icons/bi";
 import { FaHeart, FaRetweet } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { Tweet } from '../../../../gql/graphql';
+import { Tweet, User } from '../../../../gql/graphql';
 import Link from 'next/link';
 import { usegetLikes } from '../../../../hooks/like';
 import { graphqlClient } from '../../../../clientgrahql/api';
@@ -16,27 +16,32 @@ import { FcLike } from 'react-icons/fc';
 
 
 interface FeedCardProps{
-  data:Tweet
+  data:Tweet,
+  user:User | null
 }
 
 export const FeedCard:FC<FeedCardProps> = (props) => {
   // const likes=usegetLikes(props.data.id)
   const {data}= props
-
   const queryClient=useQueryClient();
   console.log(data.getLikes)
   const haveILiked =useMemo(()=>{
     if(!data.getLikes) return false;
     return(
-        (data.getLikes?.findIndex((element)=>element?.id === props.data.author?.id) ?? -1)>=0
-        );
-    },[data.getLikes,props.data])
+        (data.getLikes?.some((element) => element?.id === props.user?.id))
+      )
+    },[data.getLikes,props.data.author?.id])
 
 
 
   const handleDislike=useCallback(async()=>{
     if(!props?.data) return;
-    await graphqlClient.request(DislikeTweetMutation,{tweetId:data.id})
+    try{
+      await graphqlClient.request(DislikeTweetMutation,{tweetId:data.id})
+    }
+    catch(e){
+      e
+    }
     await queryClient.invalidateQueries({queryKey: ["all-tweets"]})
   },[queryClient])
   const handlelike=useCallback(async()=>{
@@ -70,8 +75,11 @@ export const FeedCard:FC<FeedCardProps> = (props) => {
           </div>
           <div className='flex items-center'>
           {(haveILiked)? 
-            (<FcLike  onClick={handleDislike} />):
-            (<CiHeart onClick={handlelike}/>)
+            (<FcLike  onClick={handleDislike} />  )
+            :
+            (
+              <CiHeart onClick={handlelike}/>
+            )
           }
           <div>{data.likeCount}</div>
           </div >

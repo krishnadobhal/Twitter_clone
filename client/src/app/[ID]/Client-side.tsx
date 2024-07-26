@@ -78,7 +78,7 @@ export const UserInfos:FC<UserInfoprops> =(props)=> {
 
             <div>
                 {usersInfomation?.tweets?.map((tweet) =>
-                    tweet ? <FeedCard key={tweet.id} data={tweet as Tweet} /> : null
+                    tweet ? <FeedCard key={tweet.id} data={tweet as Tweet} user={usersInfomation}/> : null
                 )}
             </div>
         </div>

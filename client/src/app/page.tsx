@@ -5,7 +5,7 @@ import { useCurrentUser } from "../../hooks/user";
 import { useQueryClient } from "@tanstack/react-query";
 import { AddTweet } from "./components/AddTweet";
 import { useGetAllTweets } from "../../hooks/tweet";
-import { Tweet } from "../../gql/graphql";
+import { Tweet, User } from "../../gql/graphql";
 import { AiFillHome } from "react-icons/ai";
 import { IoIosSearch } from "react-icons/io";
 import { GoBell } from "react-icons/go";
@@ -29,15 +29,16 @@ const Home= ()=> {
 
 
   const AllTweets=useGetAllTweets()
+  const {user}=useCurrentUser()
   // const {tweets=[]}=useGetAllTweets();
   return (
     <div>
-      <TwitterLayout>
+      <TwitterLayout user={user as User}>
         <div>
             <AddTweet/>
           </div>
           {
-              AllTweets.tweets?.map(tweet => tweet? <FeedCard key={tweet?.id} data={tweet as Tweet}/> : null)
+              AllTweets.tweets?.map(tweet => tweet? <FeedCard key={tweet?.id} data={tweet as Tweet} user={user as User}/> : null)
             }
         </TwitterLayout>
       </div>
