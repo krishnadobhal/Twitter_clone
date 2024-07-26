@@ -8,10 +8,12 @@ input CreateTweetData{
     imageURL:String
 }
 type Tweet{
-id:ID!
-content:String!
-imageURL:String
-createdAt:String!
-author:User
+    id:ID!
+    content:String!
+    imageURL:String
+    createdAt:String!
+    author:User
+    likeCount: Int!
+    getLikes: [User!]!
 }
 `;
