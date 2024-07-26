@@ -7,6 +7,7 @@ import {User} from './user'
 import JWTService from '../services/jwt';
 import { GraphqlContext } from '../interface';
 import {Tweet} from "./tweet";
+import {Like} from "./Like"
 
 
 
@@ -19,25 +20,30 @@ export async function initServer() {
         typeDefs:`
             ${User.types}
             ${Tweet.types}
+            ${Like.types}
 
             type Query{
                 ${User.queries}
                 ${Tweet.queries}
+                ${Like.queries}
             }
             
             type Mutation{
             ${Tweet.mutations}
             ${User.mutations}
+            ${Like.mutations}
             }
         `, 
         resolvers :{
             Query:{
                 ...User.resolvers.queries,
                 ...Tweet.resolvers.queries,
+                ...Like.resolver.queries
             },
             Mutation:{
                 ...Tweet.resolvers.mutations,
                 ...User.resolvers.mutations,
+                ...Like.resolver.mutation
             },
             ...Tweet.resolvers.extraResolvers,
             ...User.resolvers.extraResolvers,

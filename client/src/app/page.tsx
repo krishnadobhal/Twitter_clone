@@ -27,6 +27,7 @@ import { getAllTweetsQuery } from "../../graphql/query/tweet";
 const Home= ()=> {
 
 
+
   const AllTweets=useGetAllTweets()
   // const {tweets=[]}=useGetAllTweets();
   return (

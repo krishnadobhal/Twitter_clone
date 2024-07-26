@@ -70,7 +70,15 @@ const mutations = {
 };
 const extraResolvers = {
     Tweet: {
-        author: (parent) => user_1.default.getUserById(parent.authorId)
+        author: (parent) => user_1.default.getUserById(parent.authorId),
+        likeCount: (parent) => prisma.like.count({ where: { tweetId: parent.id } }),
+        getLikes: (parent) => __awaiter(void 0, void 0, void 0, function* () {
+            const likes = yield prisma.like.findMany({
+                where: { tweetId: parent.id },
+                include: { User: true }
+            });
+            return likes.map(like => like.User);
+        })
     }
 };
 exports.resolvers = { mutations, extraResolvers, queries };
