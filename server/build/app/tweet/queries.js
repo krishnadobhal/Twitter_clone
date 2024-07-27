@@ -4,4 +4,5 @@ exports.queries = void 0;
 exports.queries = `#graphql
     getAllTweets:[Tweet]
     getSignedUrlForTweet(imageName:String!,imageType:String!):String
+    getTweetByID(id:String!):[Tweet]
 `;

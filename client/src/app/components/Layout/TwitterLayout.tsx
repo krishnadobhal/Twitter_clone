@@ -20,7 +20,7 @@ import { User } from "../../../../gql/graphql";
 
 interface TwitterLayoutProp {
   children: React.ReactNode,
-  user:User|null
+  // user:User|null
 }
 interface TwitterSidebarButton {
   title: string;
@@ -29,8 +29,8 @@ interface TwitterSidebarButton {
 }
 
 export const TwitterLayout: React.FC<TwitterLayoutProp> = (props) => {
-  const user = props.user
-  // console.log(`user-> ${user}`)
+  const {user} = useCurrentUser()
+  console.log(`user-> ${user}`)
   
   const SidebarItems: TwitterSidebarButton[] = useMemo(
     () => [
@@ -129,7 +129,7 @@ export const TwitterLayout: React.FC<TwitterLayoutProp> = (props) => {
                     <span className="hidden sm:inline ">{item.title}</span>
                   </Link>
                 </li>
-              ))}
+              ))} 
             </ul>
             <div className="mt-5 sm:px-5">
               <button className="hidden sm:block bg-[#1A8CD8] py-3 px-4 rounded-full text-xl w-full font-semibold ">

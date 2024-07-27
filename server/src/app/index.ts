@@ -10,7 +10,6 @@ import {Tweet} from "./tweet";
 import {Like} from "./Like"
 
 
-
 export async function initServer() {
     const app=express();
     app.use(cors())
@@ -60,7 +59,6 @@ export async function initServer() {
         }
     }))
 
-    
 
     return app;
 } 

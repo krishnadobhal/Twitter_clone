@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { graphqlClient } from "../clientgrahql/api";
 import { CreateTweetData } from "../gql/graphql";
 import { createTweetMutation } from "../graphql/mutation/tweet";
-import { getAllTweetsQuery } from "../graphql/query/tweet";
+import { getAllTweetsQuery, GetTweetByIDQuery } from "../graphql/query/tweet";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreateTweet =()=>{
@@ -28,3 +28,11 @@ export const useGetAllTweets = ()=>{
     });
     return {...query,tweets:query.data?.getAllTweets};
 };
+export const useGetTweetByID = (id:any)=>{
+    const query=useQuery({
+        queryKey: [`${id}`],
+        queryFn: () => graphqlClient.request(GetTweetByIDQuery,{id})
+    });
+    return {...query,tweets:query.data?.getTweetByID};
+};
+

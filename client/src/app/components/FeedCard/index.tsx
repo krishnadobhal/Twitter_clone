@@ -1,15 +1,13 @@
 "use client"
 import Image from 'next/image'
-import { FC, useCallback, useEffect, useMemo } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { BiMessageRounded } from "react-icons/bi";
-import { FaHeart, FaRetweet } from "react-icons/fa";
+import {  FaRetweet } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { Tweet, User } from '../../../../gql/graphql';
 import Link from 'next/link';
-import { usegetLikes } from '../../../../hooks/like';
 import { graphqlClient } from '../../../../clientgrahql/api';
-import { getLikesQuery } from '../../../../graphql/query/Like';
 import { DislikeTweetMutation, LikeTweetMutation } from '../../../../graphql/mutation/like';
 import { useQueryClient } from '@tanstack/react-query';
 import { FcLike } from 'react-icons/fc';
@@ -23,14 +21,16 @@ interface FeedCardProps{
 export const FeedCard:FC<FeedCardProps> = (props) => {
   // const likes=usegetLikes(props.data.id)
   const {data}= props
+  
   const queryClient=useQueryClient();
-  console.log(data.getLikes)
+  // console.log(`Like-> ${data.getLikes}`)
+  console.log(`id->${props.user?.id}`)
   const haveILiked =useMemo(()=>{
     if(!data.getLikes) return false;
     return(
         (data.getLikes?.some((element) => element?.id === props.user?.id))
       )
-    },[data.getLikes,props.data.author?.id])
+    },[data.getLikes,props.user?.id])
 
 
 
@@ -43,11 +43,13 @@ export const FeedCard:FC<FeedCardProps> = (props) => {
       e
     }
     await queryClient.invalidateQueries({queryKey: ["all-tweets"]})
+    await queryClient.invalidateQueries({queryKey: [`${props.data.author?.id}`]})
   },[queryClient])
   const handlelike=useCallback(async()=>{
     if(!props?.data) return;
     await graphqlClient.request(LikeTweetMutation,{tweetId:data.id})
     await queryClient.invalidateQueries({queryKey: ["all-tweets"]})
+    await queryClient.invalidateQueries({queryKey: [`${props.data.author?.id}`]})
   },[queryClient])
 
   return (

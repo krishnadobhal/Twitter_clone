@@ -8,32 +8,33 @@ import { Tweet, User } from "../../../gql/graphql";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import { graphqlClient } from "../../../clientgrahql/api";
-import { getUserByidQuery } from "../../../graphql/query/user";
+import { getCurrentUserQuery, getUserByidQuery } from "../../../graphql/query/user";
 import { notFound } from "next/navigation";
 import { DiVim } from "react-icons/di";
 import { useGetAllTweets } from "../../../hooks/tweet";
 import Link from "next/link";
 import UserInfos from "./Client-side";
+import { getAllTweetsQuery, GetTweetByIDQuery } from "../../../graphql/query/tweet";
 
 const AboutPage = async ({ params }: { params: { ID: string } }) => {
 
     //Here We can Write SSR funtions
     const id = params.ID as string | undefined;
     if (!id) return { notFound: true };
+    // console.log(id)
     const userInfo = await graphqlClient.request(getUserByidQuery, { id });
-    // console.log(userInfo.getUserByid)
+    const userTweet = await graphqlClient.request(GetTweetByIDQuery,{id})
     const usersInfomation= userInfo.getUserByid
-    // console.log(userInfo.getUserByid?.tweets)
     
     if (!userInfo.getUserByid)
         return (
-            <TwitterLayout user={null}>
+            <TwitterLayout >
                 <div>Not found</div>
             </TwitterLayout>
         );
        
     return (
-        <TwitterLayout user={usersInfomation as User}>
+        <TwitterLayout >
             <div>
                 <nav className="flex items-center gap-3 px-3 py-3">
                     <Link href="/">
@@ -61,7 +62,7 @@ const AboutPage = async ({ params }: { params: { ID: string } }) => {
                     )}
                 </div> */}
             </div>
-            <UserInfos IDs={params.ID} usersInfomation={usersInfomation as User}/>
+            <UserInfos IDs={params.ID} usersInfomation={usersInfomation as User} userTweet={userTweet.getTweetByID as Tweet[]} />
         </TwitterLayout>
     );
 };
