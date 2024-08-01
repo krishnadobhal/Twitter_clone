@@ -18,6 +18,8 @@ const queries ={
     getAllTweets:()=>
         TweetService.getAllTweets() ,
 
+    getTweetById:async(parent:any, {id}:{id:string} ) =>TweetService.getTweetById(id),
+
     getSignedUrlForTweet:async(parent:any,{imageType,imageName}:{imageType:string,imageName:string},ctx:GraphqlContext)=>{
         if (!ctx.user || !ctx.user.id) throw new Error("Unauthenticated");
     const allowedImageTypes = [

@@ -20,7 +20,10 @@ interface FeedCardProps{
 
 export const FeedCard:FC<FeedCardProps> = (props) => {
   // const likes=usegetLikes(props.data.id)
+
   const {data}= props
+  console.log(data);
+
   
   const queryClient=useQueryClient();
   // console.log(`Like-> ${data.getLikes}`)
@@ -72,10 +75,12 @@ export const FeedCard:FC<FeedCardProps> = (props) => {
           data.imageURL && <Image src={data.imageURL} alt="tweet-image" height={300} width={300}></Image>
         }
         <div className='flex  justify-between p-2 w-[90%] text-gray-500'>
-          <div className='flex items-center'>
+          <div className='flex items-center sm:hover:bg-[#C4E4FF] sm:hover:text-black rounded-full p-3  sm:hover:shadow-[0px_0px_10px_2px_#C4E4FF]'>
+            <Link href={`comment/${data.id}`}>
           <BiMessageRounded/>
+            </Link>
           </div>
-          <div className='flex items-center'>
+          <div className='flex items-center sm:hover:bg-[#F31559] sm:hover:text-black rounded-full p-2  sm:hover:shadow-[0px_0px_10px_2px_#FF0000]'>
           {(haveILiked)? 
             (<FcLike  onClick={handleDislike} />  )
             :

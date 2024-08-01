@@ -50,3 +50,33 @@ export const GetTweetByIDQuery=graphql(`
 }
 `)
 
+
+export const getTweetByIdQuery=graphql(`
+  #graphql
+  query GetTweetById($getTweetByIdId: ID!) {
+  getTweetById(id: $getTweetByIdId) {
+    id
+    content
+    imageURL
+    author {
+      email
+      firstName
+      lastName
+      profileImageURL
+    }
+    
+    comment {
+      content
+      createdAt
+      id
+      tweetId
+      user {
+        firstName
+        lastName
+        profileImageURL
+      }
+  }
+  }
+}
+  `)
+
