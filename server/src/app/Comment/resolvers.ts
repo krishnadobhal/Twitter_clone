@@ -1,18 +1,24 @@
 import { PrismaClient } from "@prisma/client";
 import { GraphqlContext } from "../../interface";
+import { prismaClient } from "../../client/db";
 const prisma=new PrismaClient();
+
+interface CreateTweetPayload{
+    content: string
+    tweetId :string
+}
 const mutation={
-    createComment:async(_parent:any,{tweetId,content}:{tweetId:string,content:string},ctx:GraphqlContext)=>{
+    createComment:async(_parent:any,{payload}:{payload:CreateTweetPayload},ctx:GraphqlContext)=>{
         const user=ctx.user?.id;
             if (!user) throw new Error("You are not authenticated");
 
             try{
 
-                await prisma.comment.create({
-                
+                await prismaClient.comment.create({
                     data:{
-                        content,
-                        tweet:{connect:{id:tweetId}},
+                        tweet:{connect:{id:payload.tweetId}},
+                        content:payload.content,
+                        user:{connect:{id:user}}
                     },
                 })
                 

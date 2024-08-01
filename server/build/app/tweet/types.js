@@ -15,5 +15,6 @@ type Tweet{
     author:User
     likeCount: Int!
     getLikes: [User!]!
+    comment: [Comment]
 }
 `;

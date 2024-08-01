@@ -11,5 +11,6 @@ export const types=`#graphql
         following:[User]
         
     tweets:[Tweet]  
+    comment:[Comment]
     }
 `;

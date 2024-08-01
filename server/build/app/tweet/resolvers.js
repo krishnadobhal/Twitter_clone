@@ -24,6 +24,7 @@ const s3Client = new client_s3_1.S3Client({
 });
 const queries = {
     getAllTweets: () => tweet_1.default.getAllTweets(),
+    getTweetById: (parent_1, _a) => __awaiter(void 0, [parent_1, _a], void 0, function* (parent, { id }) { return tweet_1.default.getTweetById(id); }),
     getSignedUrlForTweet: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { imageType, imageName }, ctx) {
         if (!ctx.user || !ctx.user.id)
             throw new Error("Unauthenticated");

@@ -11,18 +11,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolver = void 0;
 const client_1 = require("@prisma/client");
+const db_1 = require("../../client/db");
 const prisma = new client_1.PrismaClient();
 const mutation = {
-    createComment: (_parent_1, _a, ctx_1) => __awaiter(void 0, [_parent_1, _a, ctx_1], void 0, function* (_parent, { tweetId, content }, ctx) {
+    createComment: (_parent_1, _a, ctx_1) => __awaiter(void 0, [_parent_1, _a, ctx_1], void 0, function* (_parent, { payload }, ctx) {
         var _b;
         const user = (_b = ctx.user) === null || _b === void 0 ? void 0 : _b.id;
         if (!user)
             throw new Error("You are not authenticated");
         try {
-            yield prisma.comment.create({
+            yield db_1.prismaClient.comment.create({
                 data: {
-                    content,
-                    tweet: { connect: { id: tweetId } },
+                    tweet: { connect: { id: payload.tweetId } },
+                    content: payload.content,
+                    user: { connect: { id: user } }
                 },
             });
             return true;

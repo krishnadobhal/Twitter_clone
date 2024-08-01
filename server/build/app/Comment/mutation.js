@@ -2,5 +2,5 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mutation = void 0;
 exports.mutation = `#graphql
-createComment(tweetId: String!, content: String!):Boolean!
+createComment(payload:CreateCommentData):Boolean!
 `;
