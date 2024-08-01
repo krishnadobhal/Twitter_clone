@@ -16,9 +16,11 @@ import toast from "react-hot-toast";
 import { graphqlClient } from "../../../../clientgrahql/api";
 import { verifyGoogleTokenQuery } from "../../../../graphql/query/user";
 import Link from "next/link";
+import { User } from "../../../../gql/graphql";
 
 interface TwitterLayoutProp {
-  children: React.ReactNode;
+  children: React.ReactNode,
+  // user:User|null
 }
 interface TwitterSidebarButton {
   title: string;
@@ -27,8 +29,8 @@ interface TwitterSidebarButton {
 }
 
 export const TwitterLayout: React.FC<TwitterLayoutProp> = (props) => {
-  const { user } = useCurrentUser();
-  // console.log(`user-> ${user}`)
+  const {user} = useCurrentUser()
+  console.log(`user-> ${user}`)
   
   const SidebarItems: TwitterSidebarButton[] = useMemo(
     () => [
@@ -101,9 +103,10 @@ export const TwitterLayout: React.FC<TwitterLayoutProp> = (props) => {
     [queryClient]
   );
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = useCallback(async() => {
     localStorage.removeItem("_twitter_token");
-    location.reload();
+    await queryClient.invalidateQueries({queryKey: ["all-tweets"]})
+    await queryClient.invalidateQueries({queryKey: ["current_user"]})
   }, []);
 
   return (
@@ -126,7 +129,7 @@ export const TwitterLayout: React.FC<TwitterLayoutProp> = (props) => {
                     <span className="hidden sm:inline ">{item.title}</span>
                   </Link>
                 </li>
-              ))}
+              ))} 
             </ul>
             <div className="mt-5 sm:px-5">
               <button className="hidden sm:block bg-[#1A8CD8] py-3 px-4 rounded-full text-xl w-full font-semibold ">

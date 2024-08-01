@@ -19,6 +19,7 @@ const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 const client_s3_1 = require("@aws-sdk/client-s3");
 const user_1 = __importDefault(require("../../services/user"));
 const tweet_1 = __importDefault(require("../../services/tweet"));
+const db_1 = require("../../client/db");
 const s3Client = new client_s3_1.S3Client({
     region: process.env.AWS_DEFAULT_REGION
 });
@@ -43,6 +44,17 @@ const queries = {
         });
         const signedURL = yield (0, s3_request_presigner_1.getSignedUrl)(s3Client, putObjectCommand);
         return signedURL;
+    }),
+    getTweetByID: (parent_1, _a, ctx_1) => __awaiter(void 0, [parent_1, _a, ctx_1], void 0, function* (parent, { id }, ctx) {
+        console.log(`TweeByID=> ${ctx.user}`);
+        return db_1.prismaClient.tweet.findMany({
+            where: {
+                authorId: id
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        });
     })
 };
 const mutations = {

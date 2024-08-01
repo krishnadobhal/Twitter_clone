@@ -6,6 +6,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { S3Client, PutObjectCommand,DeleteObjectCommand } from "@aws-sdk/client-s3";
 import UserService from '../../services/user';
 import TweetService, { CreateTweetPayload } from '../../services/tweet';
+import { prismaClient } from '../../client/db';
 
 
 
@@ -41,6 +42,18 @@ const queries ={
 
     return signedURL;
         
+    },
+    getTweetByID:async(parent:any,{id}:{id:string},ctx:GraphqlContext)=>{
+        console.log(`TweeByID=> ${ctx.user}`)
+
+        return prismaClient.tweet.findMany({
+            where: {
+                authorId: id
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        });
     }
 }
 

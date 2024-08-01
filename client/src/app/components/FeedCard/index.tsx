@@ -1,22 +1,21 @@
 "use client"
 import Image from 'next/image'
-import { FC, useCallback, useEffect, useMemo } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { BiMessageRounded } from "react-icons/bi";
-import { FaHeart, FaRetweet } from "react-icons/fa";
+import {  FaRetweet } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { Tweet } from '../../../../gql/graphql';
+import { Tweet, User } from '../../../../gql/graphql';
 import Link from 'next/link';
-import { usegetLikes } from '../../../../hooks/like';
 import { graphqlClient } from '../../../../clientgrahql/api';
-import { getLikesQuery } from '../../../../graphql/query/Like';
 import { DislikeTweetMutation, LikeTweetMutation } from '../../../../graphql/mutation/like';
 import { useQueryClient } from '@tanstack/react-query';
 import { FcLike } from 'react-icons/fc';
 
 
 interface FeedCardProps{
-  data:Tweet
+  data:Tweet,
+  user:User | null
 }
 
 export const FeedCard:FC<FeedCardProps> = (props) => {
@@ -24,27 +23,36 @@ export const FeedCard:FC<FeedCardProps> = (props) => {
 
   const {data}= props
   console.log(data);
+
   
   const queryClient=useQueryClient();
-  console.log(data.getLikes)
+  // console.log(`Like-> ${data.getLikes}`)
+  console.log(`id->${props.user?.id}`)
   const haveILiked =useMemo(()=>{
     if(!data.getLikes) return false;
     return(
-        (data.getLikes?.findIndex((element)=>element?.id === props.data.author?.id) ?? -1)>=0
-        );
-    },[data.getLikes,props.data])
+        (data.getLikes?.some((element) => element?.id === props.user?.id))
+      )
+    },[data.getLikes,props.user?.id])
 
 
 
   const handleDislike=useCallback(async()=>{
     if(!props?.data) return;
-    await graphqlClient.request(DislikeTweetMutation,{tweetId:data.id})
+    try{
+      await graphqlClient.request(DislikeTweetMutation,{tweetId:data.id})
+    }
+    catch(e){
+      e
+    }
     await queryClient.invalidateQueries({queryKey: ["all-tweets"]})
+    await queryClient.invalidateQueries({queryKey: [`${props.data.author?.id}`]})
   },[queryClient])
   const handlelike=useCallback(async()=>{
     if(!props?.data) return;
     await graphqlClient.request(LikeTweetMutation,{tweetId:data.id})
     await queryClient.invalidateQueries({queryKey: ["all-tweets"]})
+    await queryClient.invalidateQueries({queryKey: [`${props.data.author?.id}`]})
   },[queryClient])
 
   return (
@@ -74,8 +82,11 @@ export const FeedCard:FC<FeedCardProps> = (props) => {
           </div>
           <div className='flex items-center sm:hover:bg-[#F31559] sm:hover:text-black rounded-full p-2  sm:hover:shadow-[0px_0px_10px_2px_#FF0000]'>
           {(haveILiked)? 
-            (<FcLike  onClick={handleDislike} />):
-            (<CiHeart onClick={handlelike}/>)
+            (<FcLike  onClick={handleDislike} />  )
+            :
+            (
+              <CiHeart onClick={handlelike}/>
+            )
           }
           <div>{data.likeCount}</div>
           </div >

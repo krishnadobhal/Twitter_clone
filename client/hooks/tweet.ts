@@ -3,6 +3,7 @@ import { graphqlClient } from "../clientgrahql/api";
 import { CreateTweetData } from "../gql/graphql";
 import { createTweetMutation } from "../graphql/mutation/tweet";
 import { getAllTweetsQuery, getTweetByIdQuery } from "../graphql/query/tweet";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreateTweet =()=>{
@@ -37,3 +38,5 @@ export const useGetTweetById=(getTweetByIdId:any)=>{
     });
     return {...query,tweet:query.data?.getTweetById}
 }
+
+
