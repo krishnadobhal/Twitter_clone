@@ -10,6 +10,8 @@ interface CreateTweetPayload{
 const mutation={
     createComment:async(_parent:any,{payload}:{payload:CreateTweetPayload},ctx:GraphqlContext)=>{
         const user=ctx.user?.id;
+        console.log(user);
+        
             if (!user) throw new Error("You are not authenticated");
 
             try{
@@ -25,6 +27,7 @@ const mutation={
                   return true;
             }catch(e){
                     console.log("error in resolver",e);
+                    throw new Error("You are not authenticated");
                     return false;
                     
             }

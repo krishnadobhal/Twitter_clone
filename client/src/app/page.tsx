@@ -33,7 +33,7 @@ const Home= ()=> {
   // const {tweets=[]}=useGetAllTweets();
   return (
     <div>
-      <TwitterLayout user={user as User}>
+      <TwitterLayout >
         <div>
             <AddTweet/>
           </div>

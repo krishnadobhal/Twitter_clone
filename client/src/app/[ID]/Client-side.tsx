@@ -7,7 +7,7 @@ import { useCurrentUser } from "../../../hooks/user";
 import { graphqlClient  } from "../../../clientgrahql/api";
 import { followUserMutation, unfollowUserMutation } from "../../../graphql/mutation/user";
 import {  useQueryClient } from "@tanstack/react-query";
-import {  useGetTweetByID } from "../../../hooks/tweet";
+import {  useGetTweetByAuthorId } from "../../../hooks/tweet";
 
 interface UserInfoprops{
     IDs:string,
@@ -25,7 +25,7 @@ export const UserInfos:FC<UserInfoprops> =(props)=> {
     const {user:currentUser}=useCurrentUser();
     // const {tweets:IDuser}=useGetTweetByID(props.IDs)
 
-    const {tweets = props.userTweet as Tweet[]}= useGetTweetByID(props.IDs)
+    const {tweet = props.userTweet as Tweet[]}= useGetTweetByAuthorId(props.IDs)
     
 
    const queryClient=useQueryClient();
@@ -84,7 +84,7 @@ export const UserInfos:FC<UserInfoprops> =(props)=> {
             </div>
 
             <div>
-                {tweets?.map((tweet) =>
+                {tweet?.map((tweet) =>
                     tweet ? <FeedCard key={tweet.id} data={tweet as Tweet} user={currentUser as User}/> : null
                 )}
             </div>

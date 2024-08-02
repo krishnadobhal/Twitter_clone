@@ -43,7 +43,7 @@ const queries ={
     return signedURL;
         
     },
-    getTweetByID:async(parent:any,{id}:{id:string},ctx:GraphqlContext)=>{
+    getTweetsByauthorID:async(parent:any,{id}:{id:string},ctx:GraphqlContext)=>{
         console.log(`TweeByID=> ${ctx.user}`)
 
         return prismaClient.tweet.findMany({

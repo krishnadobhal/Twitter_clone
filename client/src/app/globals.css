@@ -30,6 +30,12 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .boxshadow:hover{
+    box-shadow: 0 0 5px #EF5350,
+    0 0 25px #EF5350,
+    0 0 50px #EF5350,
+    0 0 100px 
+  }
 
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

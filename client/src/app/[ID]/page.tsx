@@ -14,7 +14,7 @@ import { DiVim } from "react-icons/di";
 import { useGetAllTweets } from "../../../hooks/tweet";
 import Link from "next/link";
 import UserInfos from "./Client-side";
-import { getAllTweetsQuery, GetTweetByIDQuery } from "../../../graphql/query/tweet";
+import { getAllTweetsQuery, GetTweetsByAuthorIDQuery } from "../../../graphql/query/tweet";
 
 const AboutPage = async ({ params }: { params: { ID: string } }) => {
 
@@ -23,7 +23,7 @@ const AboutPage = async ({ params }: { params: { ID: string } }) => {
     if (!id) return { notFound: true };
     // console.log(id)
     const userInfo = await graphqlClient.request(getUserByidQuery, { id });
-    const userTweet = await graphqlClient.request(GetTweetByIDQuery,{id})
+    const userTweet = await graphqlClient.request(GetTweetsByAuthorIDQuery,{id})
     const usersInfomation= userInfo.getUserByid
     
     if (!userInfo.getUserByid)
@@ -62,7 +62,7 @@ const AboutPage = async ({ params }: { params: { ID: string } }) => {
                     )}
                 </div> */}
             </div>
-            <UserInfos IDs={params.ID} usersInfomation={usersInfomation as User} userTweet={userTweet.getTweetByID as Tweet[]} />
+            <UserInfos IDs={params.ID} usersInfomation={usersInfomation as User} userTweet={userTweet.getTweetsByauthorID as Tweet[]} />
         </TwitterLayout>
     );
 };

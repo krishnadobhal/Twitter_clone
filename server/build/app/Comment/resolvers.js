@@ -17,6 +17,7 @@ const mutation = {
     createComment: (_parent_1, _a, ctx_1) => __awaiter(void 0, [_parent_1, _a, ctx_1], void 0, function* (_parent, { payload }, ctx) {
         var _b;
         const user = (_b = ctx.user) === null || _b === void 0 ? void 0 : _b.id;
+        console.log(user);
         if (!user)
             throw new Error("You are not authenticated");
         try {
@@ -31,6 +32,7 @@ const mutation = {
         }
         catch (e) {
             console.log("error in resolver", e);
+            throw new Error("You are not authenticated");
             return false;
         }
     })

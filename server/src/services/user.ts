@@ -23,9 +23,9 @@ interface GoogleTokenResult {
     kid?: string
     typ?: string
 }
-export default class UserService{
-    public static async verifyGoogleAuthToken(token:string){
-         const googleToken = token;
+export default class UserService {
+    public static async verifyGoogleAuthToken(token: string) {
+        const googleToken = token;
         const googleOauthURL = new URL('https://oauth2.googleapis.com/tokeninfo');
         googleOauthURL.searchParams.set("id_token", googleToken);
 
@@ -55,22 +55,22 @@ export default class UserService{
         return userToken;
     }
 
-    public static async getUserById(id:string){
-       return prismaClient.user.findUnique({where:{id}});
+    public static async getUserById(id: string) {
+        return prismaClient.user.findUnique({ where: { id } });
     }
-      
-    public static async followUser(from:string ,to:string){
+
+    public static async followUser(from: string, to: string) {
         return prisma.follows.create({
-            data:{
-                follower:{connect:{id:from}},
-                following:{connect:{id:to}},
+            data: {
+                follower: { connect: { id: from } },
+                following: { connect: { id: to } },
             },
         });
     }
 
-    public  static async unfollowUser(from:string, to:string){
+    public static async unfollowUser(from: string, to: string) {
         return prisma.follows.delete({
-            where:{followerId_followingId:{followerId:from,followingId:to}}
+            where: { followerId_followingId: { followerId: from, followingId: to } }
         })
     }
 

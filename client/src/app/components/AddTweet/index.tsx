@@ -115,11 +115,11 @@ const DiscardImage=useCallback(async()=>{
           onChange={(e) => setContent(e.target.value)}
           placeholder={"What's Happening?"}
           rows={3}
-          className=" px-1 bg-transparent border-b border-slate-700 w-full text-xl "
+          className=" px-1 bg-transparent border-b border-slate-700 w-full text-xl resize-none focus:border-blue-500 "
         ></textarea>
         {ImageURL && <Image src={ImageURL} alt="tweet-image" height={300} width={300}></Image>}
-        <div className="flex justify-between px-4 my-2 items-center">
-          <CiImageOn onClick={handleSelectImage} className="text-2xl " />
+        <div className="flex justify-between px-4 my-2 items-center ">
+          <CiImageOn onClick={handleSelectImage} className="text-2xl hover:text-blue-300" />
 
           <div className="flex gap-6">
           <button 

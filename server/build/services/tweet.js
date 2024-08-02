@@ -17,7 +17,10 @@ class TweetService {
         return db_1.prismaClient.tweet.findMany({ orderBy: { createdAt: "desc" } });
     }
     static getTweetById(id) {
-        return prisma.tweet.findUnique({ where: { id },
+        return prisma.tweet.findUnique({
+            where: {
+                id
+            },
             include: {
                 comment: {
                     include: {
@@ -26,7 +29,8 @@ class TweetService {
                         createdAt: "desc"
                     }
                 },
-            }, });
+            },
+        });
     }
 }
 exports.default = TweetService;

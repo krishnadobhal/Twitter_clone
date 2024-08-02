@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { graphqlClient } from "../clientgrahql/api";
 import { CreateTweetData } from "../gql/graphql";
 import { createTweetMutation } from "../graphql/mutation/tweet";
-import { getAllTweetsQuery, getTweetByIdQuery } from "../graphql/query/tweet";
+import { getAllTweetsQuery, getTweetByIdQuery, GetTweetsByAuthorIDQuery } from "../graphql/query/tweet";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -30,6 +30,14 @@ export const useGetAllTweets = ()=>{
     return {...query,tweets:query.data?.getAllTweets};
 };
 
+
+export const useGetTweetByAuthorId=(getTweetByIdId:any)=>{
+    const query=useQuery({
+        queryKey:[`${getTweetByIdId}`],
+        queryFn:()=>graphqlClient.request(GetTweetsByAuthorIDQuery,{id:getTweetByIdId})
+    });
+    return {...query,tweet:query.data?.getTweetsByauthorID}
+}
 
 export const useGetTweetById=(getTweetByIdId:any)=>{
     const query=useQuery({

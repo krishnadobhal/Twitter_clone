@@ -23,7 +23,11 @@ export default class TweetService{
     }
      
     public static getTweetById(id:string){
-        return prisma.tweet.findUnique({where:{id},
+        return prisma.tweet.findUnique(
+            {
+                where:{
+                    id
+                },
             include:{
                 comment:{
                     include:{
