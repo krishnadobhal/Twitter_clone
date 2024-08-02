@@ -48,6 +48,7 @@ A FullStack clone of the popular social media platform Twitter built with Next.j
 * Authentication
   
   * JWT
+  * Google Auth
 
 <a name="installation"><a/>
 # Installation
