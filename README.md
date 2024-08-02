@@ -2,12 +2,10 @@
 
 A FullStack clone of the popular social media platform Twitter built with Next.js and GraphQL.
 
-<div>
   
-<p><img align="left" src="https://github.com/user-attachments/assets/3f0f113d-7035-48fd-adcd-24b05a8596c5" width="480" height="300"/></p>
-<p><img align="right" src="https://github.com/user-attachments/assets/2921ec1c-99c7-4163-bbb1-2275198739bf" width="480" height="300"/></p>
+<span align="left" ><img src="https://github.com/user-attachments/assets/3f0f113d-7035-48fd-adcd-24b05a8596c5" width="480" height="300"/></span>
+<span align="right" ><img src="https://github.com/user-attachments/assets/2921ec1c-99c7-4163-bbb1-2275198739bf" width="480" height="300"/></span>
 
-</div>
 
 # Table of Content
   - [Features](#features)
