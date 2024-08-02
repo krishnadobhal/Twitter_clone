@@ -10,10 +10,10 @@ A FullStack clone of the popular social media platform Twitter built with Next.j
 </div>
 
 # Table of Content
-  - [Features](features)
-  - [Tech Stack](tech)
-  - [Installation](installation)
-  - [Usage](use)
+  - [Features](#features)
+  - [Tech Stack](#tech)
+  - [Installation](#installation)
+  - [Usage](#use)
     
 <a name="features"><a/>
 # Features
