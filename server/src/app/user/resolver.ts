@@ -9,7 +9,7 @@ import { prismaClient } from '../../client/db';
 
 const queries = {
     verifyGoogleToken: async (parent: any, { token }: { token: string }) => {
-        // console.log(token)
+        console.log(token)
         const resultToken = await UserService.verifyGoogleAuthToken(token);
         return resultToken;
     },

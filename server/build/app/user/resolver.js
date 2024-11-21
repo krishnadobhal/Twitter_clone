@@ -18,7 +18,7 @@ const prisma = new client_1.PrismaClient();
 const user_1 = __importDefault(require("../../services/user"));
 const queries = {
     verifyGoogleToken: (parent_1, _a) => __awaiter(void 0, [parent_1, _a], void 0, function* (parent, { token }) {
-        // console.log(token)
+        console.log(token);
         const resultToken = yield user_1.default.verifyGoogleAuthToken(token);
         return resultToken;
     }),

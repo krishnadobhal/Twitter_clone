@@ -7,11 +7,12 @@ import { S3Client, PutObjectCommand,DeleteObjectCommand } from "@aws-sdk/client-
 import UserService from '../../services/user';
 import TweetService, { CreateTweetPayload } from '../../services/tweet';
 import { prismaClient } from '../../client/db';
+import * as dotenv from "dotenv"
 
-
+dotenv.config()
 
 const s3Client=new S3Client({
-    region:process.env.AWS_DEFAULT_REGION
+    region:"ap-south-1"
 })
 
 const queries ={
@@ -33,7 +34,7 @@ const queries ={
         throw new Error("Unsupported Image Type");
 
     const putObjectCommand = new PutObjectCommand({
-        Bucket: process.env.AWS_S3_BUCKET,
+        Bucket: "twitter-krishna",
         ContentType: imageType,
         Key: `uploads/${ctx.user.id}/tweets/${imageName}-${ctx.user.createdAt}`,
     });

@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ReactQueryProvider>
-        <GoogleOAuthProvider clientId="206972098005-j9v33lej5638f9e65purlb7lp6urdvog.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId="896957356055-blqkf98eu37v3sjvg32nnt16q0uttrsf.apps.googleusercontent.com">
           {children}
           <Toaster/>
           <ReactQueryDevtools/>
